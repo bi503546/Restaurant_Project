@@ -27,6 +27,8 @@ table {
 }
 label {
     color : #565656;
+    padding: 12px 12px 12px 0;
+    
 }
 labelTable{
     background-color : rgb(245, 243, 242);
@@ -47,27 +49,28 @@ tr:hover {
 }
 
 input:invalid {
-    background-color: rgb(245, 243, 242);
+    background-color: #F4C4BE;
 }
 
 input:valid {
-    background-color: #F09979;
+    background-color: #F1F1F1;
 }
 
 .bordureRouge {
     border: 2px dashed rgb(145, 61, 19);
     /*color : #B0B0B0;*/
 }
-.button {
+
+.button, .buttonPrec, .buttonModify {
     display: inline-block;
     border-radius: 4px;
     background-color: rgb(134, 129, 127);
     border: none;
     color: #FFFFFF;
     text-align: center;
-    font-size: 28px;
-    padding: 20px;
-    width: 200px;
+    font-size: 18px;
+    padding: 10px;
+    width: 120px;
     transition: all 0.5s;
     cursor: pointer;
     margin: 5px;
@@ -93,7 +96,21 @@ input:valid {
     padding-right: 25px;
   }
   
-  .button:hover span:after {
-    opacity: 1;
-    right: 0;
+  .buttonPrec:hover span {
+    padding-left: 25px;
   }
+  .Boutons{
+      padding:50px; 
+  }
+  
+/*INPUT CSS */
+  input[type=text], select, textarea {
+    width: 25%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+/*Div Modifier un restaurant */
+.modify{
+    background-color: rgba(241, 241, 241, 0.11)};

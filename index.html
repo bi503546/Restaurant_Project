@@ -22,7 +22,7 @@
                     Cuisine : <input type="text" name="cuisine" required v-model="cuisine">
                 </label>
 
-                <button>Ajouter</button>
+                <button class ="button" style ="vertical-align: middle"><span>Ajouter</span></button>
             </form>
         <p>
             <label>
@@ -31,8 +31,6 @@
                    v-on:input="chercherRestaurants"
                    v-model="name"
             >
-            <img src="Search.png" alt="Search" height="12" width="12">
-
             </label>
         </p>
         <p>
@@ -68,17 +66,17 @@
             </tbody>
         </table>
     </div>
-        <div class="bouton">
-            <button v-on:click="premierePage">1</button>
-            <button v-on:click="pagePrecedente">Precedent</button>
-            <button v-on:click="pageSuivante">Suivant</button>
-            <button v-on:click="dernierePage">{{getDernierePage()}}</button>
+        <div class="Boutons" >
+            <button class ="button" style ="vertical-align: middle" v-on:click="premierePage"><span>1</span></button>
+            <button class ="buttonPrec" style ="vertical-align: middle" v-on:click="pagePrecedente"><span>Precedent</span></button>
+            <button class ="button" style ="vertical-align: middle" v-on:click="pageSuivante"><span>Suivant</span></button>
+            <button class ="button" style ="vertical-align: middle" v-on:click="dernierePage"><span>{{getDernierePage()}}</span></button>
            
         </div>
-        <div id="#modify">
-            <h2>HTTP PUT pour modifier un restaurant</h2>
-            <p>Avec fetch/Ajax PUT<p>
-                    <p><strong>Réponse Ajax du serveur:</strong></p>
+        <img src="seperateur.png" alt=""></img>
+        <div class="modify">
+            <h2>Modifier un restaurant</h2>
+                <p><strong>Réponse Ajax du serveur:</strong></p>
                     <div id="reponsePUT" class="response"></div>
                     <form id="formulaireModification" onsubmit="putRequest(event);">
                         <fieldset>
@@ -96,7 +94,7 @@
                                     placeholder="Cuisine française">
                             </label>
                             <p></p>
-                            <button>Modifier ce restaurant</button>
+                            <button class="button" v-on:click="putRequest"><span>Modifier ce restaurant</span></button>
                         </fieldset>
                     </form>
         </div>
