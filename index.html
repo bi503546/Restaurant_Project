@@ -75,7 +75,7 @@
         </div>
         <img src="seperateur.png" alt=""></img>
         <div class="modify">
-            <h2>Modifier un restaurant</h2>
+            <h2 id="#modify">Modifier un restaurant</h2>
                 <p><strong>Réponse Ajax du serveur:</strong></p>
                     <div id="reponsePUT" class="response"></div>
                     <form id="formulaireModification" onsubmit="putRequest(event);">
@@ -94,7 +94,7 @@
                                     placeholder="Cuisine française">
                             </label>
                             <p></p>
-                            <button class="button" v-on:click="putRequest"><span>Modifier ce restaurant</span></button>
+                            <button class="buttonModify" v-on:click="putRequest"><span>Modifier ce restaurant</span></button>
                         </fieldset>
                     </form>
         </div>
