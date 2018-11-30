@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="lib/vue.min.js"></script>
+    <script src="lib/lodash.min.js"></script>
+    <script src="js/script.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <title>JS Bin</title>
+</head>
+
+<body>
+    <div id="app">
+        <div id="form1">
+            <form v-on:submit="ajouterRestaurant">
+                <label>
+                    Nom : <input type="text" name="nom" required v-model="nom">
+                </label>
+                <label>
+                    Cuisine : <input type="text" name="cuisine" required v-model="cuisine">
+                </label>
+
+                <button>Ajouter</button>
+            </form>
+        <p>
+            <label>
+            Recherche : 
+            <input type="text"
+                   v-on:input="chercherRestaurants"
+                   v-model="name"
+            >
+            <img src="Search.png" alt="Search" height="12" width="12">
+
+            </label>
+        </p>
+        <p>
+                <label>
+                    Taille de la Page : 
+                    <input type="range" min="1" max="100" value="10" class="slider" id="myRange"
+                        v-on:input="getRestaurantsFromServer()"
+                        v-model="pagesize" 
+                    >
+                </label>
+        </p>
+        <h1>Nombre de restaurants : {{nbRestaurants}}</h1>
+        <img src="seperateur.png" alt=""></img>
+    </div>
+    <div class="miseEnFormeTable">
+        <table class="labelTable">
+            <tr>
+                <th>Nom</th>
+                <th>Cuisine </th>
+                <th>Modifier</th>
+                <th>Supprimer</th>
+            </tr>
+            <tbody>
+                <tr v-for="r,index in restaurants" v-bind:style="{backgroundColor:getColor(index)}" v-bind:class="{bordureRouge:(index === 2)}">
+                    <td>{{r.name}}</td>
+                    <td> {{r.cuisine}}</td>
+                    <td><a href="#modify"><img src="https://cdn.icon-icons.com/icons2/931/PNG/512/edit_modify_icon-icons.com_72390.png"
+                                widhth="30" height="30" border="0" /></a></td>
+                    <td><img src="https://cdn.icon-icons.com/icons2/868/PNG/512/trash_bin_icon-icons.com_67981.png"
+                            widhth="30" height="30" border="0" v-on:click="supprimerRestaurant(index)" /></td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+        <div class="bouton">
+            <button v-on:click="premierePage">1</button>
+            <button v-on:click="pagePrecedente">Precedent</button>
+            <button v-on:click="pageSuivante">Suivant</button>
+            <button v-on:click="dernierePage">{{getDernierePage()}}</button>
+           
+        </div>
+        <div id="#modify">
+            <h2>HTTP PUT pour modifier un restaurant</h2>
+            <p>Avec fetch/Ajax PUT<p>
+                    <p><strong>Réponse Ajax du serveur:</strong></p>
+                    <div id="reponsePUT" class="response"></div>
+                    <form id="formulaireModification" onsubmit="putRequest(event);">
+                        <fieldset>
+                            <legend>Modification d'un restaurant</legend>
+                            <label>
+                                Id: <input type="text" name="_id" value="56b9f89be0adc7f00f348cf6" required placeholder="Id du restaurant à modifier">
+                            </label>
+                            <p></p>
+                            <label>
+                                Nom: <input type="text" name="nom" value="Sushis de rabat" required placeholder="Michel's restaurant">
+                            </label>
+                            <p></p>
+                            <label>
+                                Cuisine: <input type="text" name="cuisine" value="Japonais/Marocaine" required
+                                    placeholder="Cuisine française">
+                            </label>
+                            <p></p>
+                            <button>Modifier ce restaurant</button>
+                        </fieldset>
+                    </form>
+        </div>
+    </div>
+</body>
+
+</html>
