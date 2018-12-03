@@ -12,53 +12,62 @@
 </head>
 
 <body>
-
 <div id="app">
-    <div id="form1">
-        <form v-on:submit="ajouterRestaurant">
-            <label>
-                Nom : <input type="text" name="nom" required v-model="nom">
-            </label>
-            <label>
-                Cuisine : <input type="text" name="cuisine" required v-model="cuisine">
-            </label>
+    <div id="entete">
+        <h1>Gestion de restaurants</h1>
 
-            <button class ="button" style ="vertical-align: middle"><span>Ajouter</span></button>
-        </form>
+        <img src="seperateur.png" alt=""></img>
+        <h1>Nombre total des restaurants : {{nbRestaurants}}</h1>
+        <br>
+        <div >
+            <form v-on:submit="ajouterRestaurant" v-if="addForm">
+                <h3>Ajout Resataurant : </h3>
+                <label>
+                    Nom : <input type="text" name="nom" required v-model="nom">
+                </label>
+                <br><br>
+                <label>
+                    Cuisine : <input type="text" name="cuisine" required v-model="cuisine">
+                </label>
+                <br>
+                <button class="button" type="submit"><span>Ajouter</span></button>
+                <button class="button" type="reset" v-on:click="cancelAjouter">Annuler</button>
+            </form>
 
+            <button class="button" v-else v-on:click="formAjouterRestaurant"><span>Nouveau Restaurant </span></button>
+        </div>
         <p>
             <label> Recherche :
                 <input type="text" v-on:input="chercherRestaurants" v-model="name">
             </label>
-        <br>
+            <br>
             <label> Taille de la Page :
-                <input type="range" min="1" max="100" value="10" class="slider" id="myRange"
-                       v-on:input="getRestaurantsFromServer()" v-model="pagesize">
+                <input type="range" min="5" max="100" step="5" class="slider" id="myRange"
+                       v-on:input="getRestaurantsFromServer()" v-model="pagesize"> : {{pagesize}}
             </label>
         </p>
-        <h1>Nombre de restaurants : {{nbRestaurants}}</h1>
-        <img src="seperateur.png" alt=""></img>
     </div>
+
     <div class="miseEnFormeTable">
         <table class="labelTable">
-            <tr>
-                <th>Nom</th>
-                <th>Cuisine </th>
-                <th>Modifier</th>
-                <th>Supprimer</th>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Cuisine </th>
+                    <th colspan="2"></th>
+                </tr>
+            </thead>
             <tbody>
             <tr v-for="r,index in restaurants" v-bind:style="{backgroundColor:getColor(index)}" v-bind:class="{bordureRouge:(index === 2)}">
-                <td>{{r._id}}</td>
                 <td>{{r.name}}</td>
                 <td>{{r.cuisine}}</td>
-                <td>
+                <td class="options">
                     <a href="#modify">
-                    <img src="https://cdn.icon-icons.com/icons2/931/PNG/512/edit_modify_icon-icons.com_72390.png"
-                                           width="30" v-on:click="formModifierRestaurant(r._id)"/>
+                        <img src="https://cdn.icon-icons.com/icons2/931/PNG/512/edit_modify_icon-icons.com_72390.png"
+                             width="30" v-on:click="formModifierRestaurant(r._id)"/>
                     </a>
                 </td>
-                <td>
+                <td class="options">
                     <img src="https://cdn.icon-icons.com/icons2/868/PNG/512/trash_bin_icon-icons.com_67981.png"
                          width="20" v-on:click="supprimerRestaurant(r._id)"/>
                 </td>
@@ -66,11 +75,11 @@
             </tbody>
         </table>
     </div>
-    <div class="Boutons" >
-        <button class ="button" style ="vertical-align: middle" v-on:click="premierePage"><span>1</span></button>
-        <button class ="buttonPrec" style ="vertical-align: middle" v-on:click="pagePrecedente"><span>Precedent</span></button>
-        <button class ="button" style ="vertical-align: middle" v-on:click="pageSuivante"><span>Suivant</span></button>
-        <button class ="button" style ="vertical-align: middle" v-on:click="dernierePage"><span>{{getDernierePage()+1}}</span></button>
+    <div class="navigation" >
+        <button class ="button" v-on:click="premierePage"><span>1</span></button>
+        <button class ="button" v-on:click="pagePrecedente"><span>Precedent</span></button>
+        <button class ="button" v-on:click="pageSuivante"><span>Suivant</span></button>
+        <button class ="button" v-on:click="dernierePage"><span>{{getDernierePage()+1}}</span></button>
 
     </div>
     <img src="seperateur.png" alt=""></img>
@@ -88,10 +97,10 @@
                 Cuisine: <input type="text" name="cuisine" v-bind:value="restaurantToModify.cuisine" required >
             </label>
 
-            <button class ="button" style ="vertical-align: middle">Modifier</button>
+            <button class="button" type="submit">Modifier</button>
+            <button class="button" type="reset" v-on:click="cancelModifier">Annuler</button>
         </form>
     </div>
-
 </div>
 </body>
 </html>

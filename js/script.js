@@ -14,6 +14,7 @@ function init() {
             page:0,
             pagesize: 10,
             name:"",
+            addForm: false,
             restaurantToModify: null,
         },
         mounted() {
@@ -21,11 +22,11 @@ function init() {
             this.getRestaurantsFromServer();
         },
         methods: {
-            getRestaurantsFromServer() {
+             getRestaurantsFromServer() {
                 if(this.page > this.getDernierePage())
                     this.page = this.getDernierePage();
 
-                if(this.page < 0)
+                if(this.page <  0)
                     this.page = 0;
 
                 let url = SERVER_URL + RESOURCE +
@@ -83,7 +84,6 @@ function init() {
                         responseJSON.json()
                             .then((res) => {
                                 console.log(res.msg);
-                                this.afficherMessage("supprimé");
                                 this.getRestaurantsFromServer();
                             });
                     })
@@ -106,7 +106,6 @@ function init() {
                         reponseJSON.json()
                             .then((reponseJS) => {
                                 console.log(reponseJS.msg);
-                                this.afficherMessage("ajouté");
                                 this.getRestaurantsFromServer();
                             });
                     })
@@ -114,8 +113,7 @@ function init() {
                         console.log(err);
                     });
 
-                this.nom = "";
-                this.cuisine = "";
+                this.addForm = false;
             },
 
             async modifierRestaurant(event) {
@@ -133,7 +131,6 @@ function init() {
                         responseJSON.json()
                             .then((res) => {
                                 console.log(res.msg);
-                                this.afficherMessage("modifié");
                             });
                     })
                     .catch((err) => {
@@ -179,9 +176,17 @@ function init() {
                 this.getRestaurantsFromServer();
             }, 300),
 
-            afficherMessage(msg) {
-                alert("Restaurant " + msg + " !");
+            formAjouterRestaurant(){
+                this.addForm = true;
             },
+
+            cancelModifier() {
+                 this.restaurantToModify = null;
+            },
+
+            cancelAjouter() {
+                 this.addForm = false;
+            }
 
         }
     })
