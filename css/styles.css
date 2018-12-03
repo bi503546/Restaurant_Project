@@ -4,7 +4,6 @@ body {
 }
 
 table {
-    background-color: white;
     border-collapse: collapse;
     max-width: 70%;
     margin: auto;
@@ -26,6 +25,7 @@ td, th {
 
 .options {
     width: 5%;
+    text-align: center;
 }
 
 label {
@@ -54,7 +54,7 @@ input:valid {
     text-align: center;
     font-size: 18px;
     padding: 10px;
-    width: 120px;
+    max-width: 120px;
     transition: all 0.5s;
     cursor: pointer;
     margin: 5px;
@@ -65,9 +65,19 @@ input:valid {
     background-color: #565656;
 }
 .navigation{
-    max-width: 80%;
     text-align: center;
     margin: auto;
+}
+
+.active, .active:hover {
+    background-color: #cccccc;
+    color: black;
+    transition: none;
+    cursor: auto;
+}
+
+.active:hover{
+
 }
 
 input[type=text], select, textarea {
@@ -77,6 +87,9 @@ input[type=text], select, textarea {
     border-radius: 4px;
     resize: vertical;
 }
-tbody > tr:hover {
+tbody tr:hover {
     background-color:#F09979;
+}
+.options > img {
+    cursor: pointer;
 }

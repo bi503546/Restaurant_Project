@@ -17,11 +17,11 @@
         <h1>Gestion de restaurants</h1>
 
         <img src="seperateur.png" alt=""></img>
-        <h1>Nombre total des restaurants : {{nbRestaurants}}</h1>
+        <h1>Total des restaurants : {{nbRestaurants}}</h1>
         <br>
         <div >
             <form v-on:submit="ajouterRestaurant" v-if="addForm">
-                <h3>Ajout Resataurant : </h3>
+                <h2>Ajout Resataurant : </h2>
                 <label>
                     Nom : <input type="text" name="nom" required v-model="nom">
                 </label>
@@ -30,17 +30,17 @@
                     Cuisine : <input type="text" name="cuisine" required v-model="cuisine">
                 </label>
                 <br>
-                <button class="button" type="submit"><span>Ajouter</span></button>
+                <button class="button" type="submit">Ajouter</button>
                 <button class="button" type="reset" v-on:click="cancelAjouter">Annuler</button>
             </form>
 
-            <button class="button" v-else v-on:click="formAjouterRestaurant"><span>Nouveau Restaurant </span></button>
+            <button class="button" v-else v-on:click="formAjouterRestaurant">Nouveau Restaurant </button>
         </div>
         <p>
             <label> Recherche :
                 <input type="text" v-on:input="chercherRestaurants" v-model="name">
             </label>
-            <br>
+            <br><br>
             <label> Taille de la Page :
                 <input type="range" min="5" max="100" step="5" class="slider" id="myRange"
                        v-on:input="getRestaurantsFromServer()" v-model="pagesize"> : {{pagesize}}
@@ -76,16 +76,17 @@
         </table>
     </div>
     <div class="navigation" >
-        <button class ="button" v-on:click="premierePage"><span>1</span></button>
-        <button class ="button" v-on:click="pagePrecedente"><span>Precedent</span></button>
-        <button class ="button" v-on:click="pageSuivante"><span>Suivant</span></button>
-        <button class ="button" v-on:click="dernierePage"><span>{{getDernierePage()+1}}</span></button>
+        <button class="button" v-on:click="premierePage" v-bind:class="{active : page === 0}">Page 1</button>
+        <button class="button" v-on:click="pagePrecedente" v-if="page > 1"><</button>
+        <button class="button active" v-if="page !== 0 && page !== getDernierePage()">{{page+1}}</button>
+        <button class="button" v-on:click="pageSuivante" v-if="page < getDernierePage() - 1">></button>
+        <button class="button" v-on:click="dernierePage">Page {{getDernierePage()+1}}</button>
 
     </div>
     <img src="seperateur.png" alt=""></img>
 
-    <div class="modify" v-if="restaurantToModify !== null">
-        <h2 id="#modify">Modifier un restaurant</h2>
+    <div id="modify" v-if="restaurantToModify !== null">
+        <h2>Modifier un restaurant</h2>
         <form v-on:submit="modifierRestaurant">
             <label>
                 Id: <input type="text" name="_id" v-bind:value="restaurantToModify._id" required disabled>
