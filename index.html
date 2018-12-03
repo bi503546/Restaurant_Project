@@ -12,6 +12,7 @@
 </head>
 
 <body>
+
 <div id="app">
     <div id="form1">
         <form v-on:submit="ajouterRestaurant">
@@ -26,21 +27,13 @@
         </form>
 
         <p>
-            <label>
-                Recherche :
-                <input type="text"
-                       v-on:input="chercherRestaurants"
-                       v-model="name"
-                >
+            <label> Recherche :
+                <input type="text" v-on:input="chercherRestaurants" v-model="name">
             </label>
-        </p>
-        <p>
-            <label>
-                Taille de la Page :
+        <br>
+            <label> Taille de la Page :
                 <input type="range" min="1" max="100" value="10" class="slider" id="myRange"
-                       v-on:input="getRestaurantsFromServer()"
-                       v-model="pagesize"
-                >
+                       v-on:input="getRestaurantsFromServer()" v-model="pagesize">
             </label>
         </p>
         <h1>Nombre de restaurants : {{nbRestaurants}}</h1>
@@ -58,11 +51,17 @@
             <tr v-for="r,index in restaurants" v-bind:style="{backgroundColor:getColor(index)}" v-bind:class="{bordureRouge:(index === 2)}">
                 <td>{{r._id}}</td>
                 <td>{{r.name}}</td>
-                <td> {{r.cuisine}}</td>
-                <td><a href="#modify"><img src="https://cdn.icon-icons.com/icons2/931/PNG/512/edit_modify_icon-icons.com_72390.png"
-                                           widhth="30" height="30" border="0" /></a></td>
-                <td><img src="https://cdn.icon-icons.com/icons2/868/PNG/512/trash_bin_icon-icons.com_67981.png"
-                         widhth="30" height="30" border="0" v-on:click="supprimerRestaurant(r._id)" /></td>
+                <td>{{r.cuisine}}</td>
+                <td>
+                    <a href="#modify">
+                    <img src="https://cdn.icon-icons.com/icons2/931/PNG/512/edit_modify_icon-icons.com_72390.png"
+                                           width="30" v-on:click="formModifierRestaurant(r._id)"/>
+                    </a>
+                </td>
+                <td>
+                    <img src="https://cdn.icon-icons.com/icons2/868/PNG/512/trash_bin_icon-icons.com_67981.png"
+                         width="20" v-on:click="supprimerRestaurant(r._id)"/>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -76,17 +75,17 @@
     </div>
     <img src="seperateur.png" alt=""></img>
 
-    <div class="modify">
+    <div class="modify" v-if="restaurantToModify !== null">
         <h2 id="#modify">Modifier un restaurant</h2>
         <form v-on:submit="modifierRestaurant">
             <label>
-                Id: <input type="text" name="_id" value="" required placeholder="Id du restaurant à modifier">
+                Id: <input type="text" name="_id" v-bind:value="restaurantToModify._id" required disabled>
             </label>
             <label>
-                Nom: <input type="text" name="nom" value="" required placeholder="Michel's restaurant">
+                Nom: <input type="text" name="nom" v-bind:value=restaurantToModify.name required >
             </label>
             <label>
-                Cuisine: <input type="text" name="cuisine" value="" required placeholder="Cuisine française">
+                Cuisine: <input type="text" name="cuisine" v-bind:value="restaurantToModify.cuisine" required >
             </label>
 
             <button class ="button" style ="vertical-align: middle">Modifier</button>
@@ -95,5 +94,4 @@
 
 </div>
 </body>
-
 </html>

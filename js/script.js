@@ -14,7 +14,7 @@ function init() {
             page:0,
             pagesize: 10,
             name:"",
-            restaurantToModify: "",
+            restaurantToModify: null,
         },
         mounted() {
             console.log("AVANT AFFICHAGE");
@@ -39,13 +39,38 @@ function init() {
                             .then((reponseJS) => {
                                 this.restaurants = reponseJS.data;
                                 this.nbRestaurants = reponseJS.count;
-                                //console.log(reponseJS.msg);
+                                console.log(reponseJS.msg);
                             });
                     }).catch((err) => {
                         console.log(err);
                     });
-
                 console.log("Page actuelle : " + this.page);
+            },
+
+            async formModifierRestaurant(id){
+                this.restaurantToModify = await this.getRestaurant(id);
+                console.log("a modifier : " + this.restaurantToModify._id);
+            },
+
+            async getRestaurant(id) {
+                let url = SERVER_URL + RESOURCE + "/" + id;
+                /*
+                let res;
+                await fetch(url)
+                    .then((reponseJSON) => {
+                        reponseJSON.json()
+                            .then((  reponseJS) => {
+                                res = reponseJS.restaurant;
+                                console.log(reponseJS.msg);
+                            });
+                    }).catch((err) => {
+                    console.log(err);
+                });*/
+
+                let response = await fetch(url);
+                let ob = await response.json();
+                let res = ob.restaurant;
+                return res;
             },
 
             supprimerRestaurant(id) {
@@ -93,16 +118,16 @@ function init() {
                 this.cuisine = "";
             },
 
-            modifierRestaurant(event) {
+            async modifierRestaurant(event) {
                 event.preventDefault();
-                let donneesFormulaire = new FormData(event.target);
+                let dataFormulaire = new FormData(event.target);
                 let id = (event.target)._id.value;
 
                 let url = SERVER_URL + RESOURCE + "/" + id;
 
-                fetch(url, {
+                await fetch(url, {
                     method: "PUT",
-                    body: donneesFormulaire
+                    body: dataFormulaire
                 })
                     .then((responseJSON) => {
                         responseJSON.json()
@@ -114,6 +139,8 @@ function init() {
                     .catch((err) => {
                         console.log(err);
                     });
+                this.restaurantToModify = null;
+                this.getRestaurantsFromServer();
             },
 
             getColor(index) {
@@ -154,8 +181,7 @@ function init() {
 
             afficherMessage(msg) {
                 alert("Restaurant " + msg + " !");
-
-            }
+            },
 
         }
     })
