@@ -8,39 +8,40 @@
     <script src="lib/lodash.min.js"></script>
     <script src="js/script.js"></script>
     <link rel="stylesheet" href="css/styles.css">
-    <title>JS Bin</title>
+    <title>Gestion de restaurants</title>
 </head>
 
 <body>
-    <div id="app">
-        <div id="form1">
-            <form v-on:submit="ajouterRestaurant">
-                <label>
-                    Nom : <input type="text" name="nom" required v-model="nom">
-                </label>
-                <label>
-                    Cuisine : <input type="text" name="cuisine" required v-model="cuisine">
-                </label>
+<div id="app">
+    <div id="form1">
+        <form v-on:submit="ajouterRestaurant">
+            <label>
+                Nom : <input type="text" name="nom" required v-model="nom">
+            </label>
+            <label>
+                Cuisine : <input type="text" name="cuisine" required v-model="cuisine">
+            </label>
 
-                <button class ="button" style ="vertical-align: middle"><span>Ajouter</span></button>
-            </form>
+            <button class ="button" style ="vertical-align: middle"><span>Ajouter</span></button>
+        </form>
+
         <p>
             <label>
-            Recherche : 
-            <input type="text"
-                   v-on:input="chercherRestaurants"
-                   v-model="name"
-            >
+                Recherche :
+                <input type="text"
+                       v-on:input="chercherRestaurants"
+                       v-model="name"
+                >
             </label>
         </p>
         <p>
-                <label>
-                    Taille de la Page : 
-                    <input type="range" min="1" max="100" value="10" class="slider" id="myRange"
-                        v-on:input="getRestaurantsFromServer()"
-                        v-model="pagesize" 
-                    >
-                </label>
+            <label>
+                Taille de la Page :
+                <input type="range" min="1" max="100" value="10" class="slider" id="myRange"
+                       v-on:input="getRestaurantsFromServer()"
+                       v-model="pagesize"
+                >
+            </label>
         </p>
         <h1>Nombre de restaurants : {{nbRestaurants}}</h1>
         <img src="seperateur.png" alt=""></img>
@@ -54,51 +55,45 @@
                 <th>Supprimer</th>
             </tr>
             <tbody>
-                <tr v-for="r,index in restaurants" v-bind:style="{backgroundColor:getColor(index)}" v-bind:class="{bordureRouge:(index === 2)}">
-                    <td>{{r.name}}</td>
-                    <td> {{r.cuisine}}</td>
-                    <td><a href="#modify"><img src="https://cdn.icon-icons.com/icons2/931/PNG/512/edit_modify_icon-icons.com_72390.png"
-                                widhth="30" height="30" border="0" /></a></td>
-                    <td><img src="https://cdn.icon-icons.com/icons2/868/PNG/512/trash_bin_icon-icons.com_67981.png"
-                            widhth="30" height="30" border="0" v-on:click="supprimerRestaurant(index)" /></td>
-
-                </tr>
+            <tr v-for="r,index in restaurants" v-bind:style="{backgroundColor:getColor(index)}" v-bind:class="{bordureRouge:(index === 2)}">
+                <td>{{r._id}}</td>
+                <td>{{r.name}}</td>
+                <td> {{r.cuisine}}</td>
+                <td><a href="#modify"><img src="https://cdn.icon-icons.com/icons2/931/PNG/512/edit_modify_icon-icons.com_72390.png"
+                                           widhth="30" height="30" border="0" /></a></td>
+                <td><img src="https://cdn.icon-icons.com/icons2/868/PNG/512/trash_bin_icon-icons.com_67981.png"
+                         widhth="30" height="30" border="0" v-on:click="supprimerRestaurant(r._id)" /></td>
+            </tr>
             </tbody>
         </table>
     </div>
-        <div class="Boutons" >
-            <button class ="button" style ="vertical-align: middle" v-on:click="premierePage"><span>1</span></button>
-            <button class ="buttonPrec" style ="vertical-align: middle" v-on:click="pagePrecedente"><span>Precedent</span></button>
-            <button class ="button" style ="vertical-align: middle" v-on:click="pageSuivante"><span>Suivant</span></button>
-            <button class ="button" style ="vertical-align: middle" v-on:click="dernierePage"><span>{{getDernierePage()}}</span></button>
-           
-        </div>
-        <img src="seperateur.png" alt=""></img>
-        <div class="modify">
-            <h2 id="#modify">Modifier un restaurant</h2>
-                <p><strong>Réponse Ajax du serveur:</strong></p>
-                    <div id="reponsePUT" class="response"></div>
-                    <form id="formulaireModification" onsubmit="putRequest(event);">
-                        <fieldset>
-                            <legend>Modification d'un restaurant</legend>
-                            <label>
-                                Id: <input type="text" name="_id" value="56b9f89be0adc7f00f348cf6" required placeholder="Id du restaurant à modifier">
-                            </label>
-                            <p></p>
-                            <label>
-                                Nom: <input type="text" name="nom" value="Sushis de rabat" required placeholder="Michel's restaurant">
-                            </label>
-                            <p></p>
-                            <label>
-                                Cuisine: <input type="text" name="cuisine" value="Japonais/Marocaine" required
-                                    placeholder="Cuisine française">
-                            </label>
-                            <p></p>
-                            <button class="buttonModify" v-on:click="putRequest"><span>Modifier ce restaurant</span></button>
-                        </fieldset>
-                    </form>
-        </div>
+    <div class="Boutons" >
+        <button class ="button" style ="vertical-align: middle" v-on:click="premierePage"><span>1</span></button>
+        <button class ="buttonPrec" style ="vertical-align: middle" v-on:click="pagePrecedente"><span>Precedent</span></button>
+        <button class ="button" style ="vertical-align: middle" v-on:click="pageSuivante"><span>Suivant</span></button>
+        <button class ="button" style ="vertical-align: middle" v-on:click="dernierePage"><span>{{getDernierePage()+1}}</span></button>
+
     </div>
+    <img src="seperateur.png" alt=""></img>
+
+    <div class="modify">
+        <h2 id="#modify">Modifier un restaurant</h2>
+        <form v-on:submit="modifierRestaurant">
+            <label>
+                Id: <input type="text" name="_id" value="" required placeholder="Id du restaurant à modifier">
+            </label>
+            <label>
+                Nom: <input type="text" name="nom" value="" required placeholder="Michel's restaurant">
+            </label>
+            <label>
+                Cuisine: <input type="text" name="cuisine" value="" required placeholder="Cuisine française">
+            </label>
+
+            <button class ="button" style ="vertical-align: middle">Modifier</button>
+        </form>
+    </div>
+
+</div>
 </body>
 
 </html>

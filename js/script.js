@@ -1,24 +1,20 @@
 window.onload = init;
 
+var SERVER_URL = "http://localhost:8081/";
+var RESOURCE = "api/restaurants";
+
 function init() {
     new Vue({
         el: "#app",
         data: {
-            restaurants: [{
-                    nom: 'café de Paris',
-                    cuisine: 'Française'
-                },
-                {
-                    nom: 'Sun City Café',
-                    cuisine: 'Américaine'
-                }
-            ],
+            restaurants: [],
             nom: '',
             cuisine: '',
             nbRestaurants:0,
             page:0,
-            pagesize:10,
+            pagesize: 10,
             name:"",
+            restaurantToModify: "",
         },
         mounted() {
             console.log("AVANT AFFICHAGE");
@@ -26,10 +22,16 @@ function init() {
         },
         methods: {
             getRestaurantsFromServer() {
-                let url = "http://localhost:8080/api/restaurants?page=" +
-                    this.page + "&pagesize=" +
-                    this.pagesize + "&name=" +
-                    this.name;
+                if(this.page > this.getDernierePage())
+                    this.page = this.getDernierePage();
+
+                if(this.page < 0)
+                    this.page = 0;
+
+                let url = SERVER_URL + RESOURCE +
+                    "?page=" + this.page +
+                    "&pagesize=" + this.pagesize +
+                    "&name=" + this.name;
 
                 fetch(url)
                     .then((reponseJSON) => {
@@ -37,110 +39,124 @@ function init() {
                             .then((reponseJS) => {
                                 this.restaurants = reponseJS.data;
                                 this.nbRestaurants = reponseJS.count;
-                                console.log(reponseJS.msg);
+                                //console.log(reponseJS.msg);
+                            });
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+
+                console.log("Page actuelle : " + this.page);
+            },
+
+            supprimerRestaurant(id) {
+                let url = SERVER_URL + RESOURCE + "/" + id;
+
+                fetch(url, {
+                    method: "DELETE",
+                })
+                    .then((responseJSON) =>{
+                        responseJSON.json()
+                            .then((res) => {
+                                console.log(res.msg);
+                                this.afficherMessage("supprimé");
+                                this.getRestaurantsFromServer();
                             });
                     })
-                    .catch(function (err) {
+                    .catch((err) => {
                         console.log(err);
                     });
             },
-            supprimerRestaurant(index) {
-                this.restaurants.splice(index, 1);
-            },
+
             ajouterRestaurant(event) {
-                // eviter le comportement par defaut
                 event.preventDefault();
+                let dataFormulaire = new FormData(event.target);
 
-                // Récupération du contenu du formulaire pour envoi en AJAX au serveur
-                // 1 - on récupère le formulaire
-                let form = event.target;
-
-                // 2 - on récupère le contenu du formulaire
-                let dataFormulaire = new FormData(form);
-
-                // 3 - on envoie une requête POST pour insertion sur le serveur
-                let url = "http://localhost:8080/api/restaurants";
+                let url = SERVER_URL + RESOURCE;
 
                 fetch(url, {
-                        method: "POST",
-                        body: dataFormulaire
-                    })
+                    method: "POST",
+                    body: dataFormulaire
+                })
                     .then((reponseJSON) => {
                         reponseJSON.json()
                             .then((reponseJS) => {
                                 console.log(reponseJS.msg);
-                                // On re-affiche les restaurants
+                                this.afficherMessage("ajouté");
                                 this.getRestaurantsFromServer();
                             });
                     })
-                    .catch(function (err) {
+                    .catch((err) => {
                         console.log(err);
                     });
-                
+
                 this.nom = "";
                 this.cuisine = "";
             },
-            putRequest(event) {
-                // Pour éviter que la page ne se ré-affiche
+
+            modifierRestaurant(event) {
                 event.preventDefault();
-            
-                // Récupération du formulaire. Pas besoin de document.querySelector
-                // ou document.getElementById puisque c'est le formulaire qui a généré
-                // l'événement
-                let form = event.target;
-                // Récupération des valeurs des champs du formulaire
-                // en prévision d'un envoi multipart en ajax/fetch
                 let donneesFormulaire = new FormData(event.target);
-            
-                let id = form._id.value; 
-                let url = "/api/restaurants/" + id;
-            
+                let id = (event.target)._id.value;
+
+                let url = SERVER_URL + RESOURCE + "/" + id;
+
                 fetch(url, {
                     method: "PUT",
                     body: donneesFormulaire
                 })
-                .then(function(responseJSON) {
-                    responseJSON.json()
-                        .then(function(res) {
-                            // Maintenant res est un vrai objet JavaScript
-                            afficheReponsePUT(res);
-                        });
+                    .then((responseJSON) => {
+                        responseJSON.json()
+                            .then((res) => {
+                                console.log(res.msg);
+                                this.afficherMessage("modifié");
+                            });
                     })
-                    .catch(function (err) {
+                    .catch((err) => {
                         console.log(err);
-                });
+                    });
             },
+
             getColor(index) {
                 return (index % 2) ? 'white' : 'lightgrey';
             },
+
             pagePrecedente() {
                 if(this.page > 1)
                     this.page--;
                 this.getRestaurantsFromServer();
             },
+
             pageSuivante() {
                 if(this.page < this.getDernierePage())
                     this.page++;
                 this.getRestaurantsFromServer();
                 console.log(this.page);
             },
+
             premierePage() {
                 this.page = 0;
                 this.getRestaurantsFromServer();
             },
+
             dernierePage() {
                 this.page = this.getDernierePage();
                 this.getRestaurantsFromServer();
-                console.log(this.page);
             },
+
             getDernierePage(){
-                var rs = (Math.ceil(this.nbRestaurants/this.pagesize)-1);
-                console.log(rs);
-                return parseInt(rs);
+                var res = (Math.ceil(this.nbRestaurants/this.pagesize)-1);
+                return parseInt(res);
             },
+
             chercherRestaurants: _.debounce(function () {
                 this.getRestaurantsFromServer();
-            }, 300)
+            }, 300),
+
+            afficherMessage(msg) {
+                alert("Restaurant " + msg + " !");
+
+            }
+
         }
     })
 }
