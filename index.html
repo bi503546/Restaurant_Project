@@ -9,6 +9,8 @@
     <script src="js/script.js"></script>
     <script src="https://unpkg.com/vue-material@beta"></script>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/vue-material@beta/dist/theme/default.css">
+
     
     <title>Gestion de restaurants</title>
 </head>
@@ -37,6 +39,8 @@
                 <input type="range" min="1" max="100" value="10" class="slider" id="myRange"
                        v-on:input="getRestaurantsFromServer()" v-model="pagesize">
             </label>
+            <md-linear-preloader :value="value"></md-linear-preloader>
+
         </p>
         <h1>Nombre de restaurants : {{nbRestaurants}}</h1>
         <img src="seperateur.png" alt=""></img>
