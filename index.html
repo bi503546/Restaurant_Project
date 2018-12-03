@@ -7,7 +7,9 @@
     <script src="lib/vue.min.js"></script>
     <script src="lib/lodash.min.js"></script>
     <script src="js/script.js"></script>
+    <script src="https://unpkg.com/vue-material@beta"></script>
     <link rel="stylesheet" href="css/styles.css">
+    
     <title>Gestion de restaurants</title>
 </head>
 
@@ -39,33 +41,37 @@
         <h1>Nombre de restaurants : {{nbRestaurants}}</h1>
         <img src="seperateur.png" alt=""></img>
     </div>
+    <template>
     <div class="miseEnFormeTable">
-        <table class="labelTable">
-            <tr>
-                <th>Nom</th>
-                <th>Cuisine </th>
-                <th>Modifier</th>
-                <th>Supprimer</th>
-            </tr>
-            <tbody>
-            <tr v-for="r,index in restaurants" v-bind:style="{backgroundColor:getColor(index)}" v-bind:class="{bordureRouge:(index === 2)}">
-                <td>{{r._id}}</td>
-                <td>{{r.name}}</td>
-                <td>{{r.cuisine}}</td>
-                <td>
+        <md-table v-model="restaurant" class="labelTable">
+            <md-table-toolbar>
+                <h1 class="md-title">Liste des restaurants</h1>
+            </md-table-toolbar>
+            <md-table-row>
+                <md-table-head>Id</md-table-head>
+                <md-table-headh>Nom</md-table-head>
+                <md-table-head>Cuisine </md-table-head>
+                <md-table-head>Modifier</md-table-head>
+                <md-table-head>Supprimer</md-table-head>
+            </md-table-row>
+            <md-table-row v-for="r,index in restaurants" v-bind:style="{backgroundColor:getColor(index)}" v-bind:class="{bordureRouge:(index === 2)}">
+                <md-table-cell>{{r._id}}</md-table-cell>
+                <md-table-cell>{{r.name}}</md-table-cell>
+                <md-table-cell>{{r.cuisine}}</md-table-cell>
+                <md-table-cell>
                     <a href="#modify">
                     <img src="https://cdn.icon-icons.com/icons2/931/PNG/512/edit_modify_icon-icons.com_72390.png"
                                            width="30" v-on:click="formModifierRestaurant(r._id)"/>
                     </a>
-                </td>
-                <td>
+                </md-table-cell>
+                <md-table-cell>
                     <img src="https://cdn.icon-icons.com/icons2/868/PNG/512/trash_bin_icon-icons.com_67981.png"
                          width="20" v-on:click="supprimerRestaurant(r._id)"/>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                </md-table-cell>
+            </md-table-row>
+        </md-table>
     </div>
+</template>
     <div class="Boutons" >
         <button class ="button" style ="vertical-align: middle" v-on:click="premierePage"><span>1</span></button>
         <button class ="buttonPrec" style ="vertical-align: middle" v-on:click="pagePrecedente"><span>Precedent</span></button>

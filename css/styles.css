@@ -1,3 +1,8 @@
+import Vue from 'vue'
+import VueMaterial from 'vue-material'
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default-dark.css' // This line here
+Vue.use(VueMaterial)
 #app{
     padding:0px;
 
@@ -38,18 +43,18 @@ legend{
     font-size: 14px;
     /*text-shadow:2px 2px #565656;*/
 }
-labelTable{
+.labelTable{
     background-color : rgb(245, 243, 242);
 }
 tr,
 td {
     border: 1px solid #565656;
-    border-radius: 20%;
+    /*border-radius: 20%;*/
 }
 
 td {
     padding: 5px;
-    border-radius: 20px;
+    /*border-radius: 20px;*/
 }
 
 tr:hover {

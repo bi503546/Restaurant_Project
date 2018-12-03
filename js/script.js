@@ -1,9 +1,14 @@
+
 window.onload = init;
 
-var SERVER_URL = "http://localhost:8081/";
+var SERVER_URL = "http://localhost:8080/";
 var RESOURCE = "api/restaurants";
 
 function init() {
+    import Vue from 'vue'
+    import VueMaterial from 'vue-material'
+    import 'vue-material/dist/vue-material.min.css'
+    Vue.use(VueMaterial.default)
     new Vue({
         el: "#app",
         data: {
