@@ -80,7 +80,7 @@
         <button class="button" v-on:click="pagePrecedente" v-if="page > 1"><</button>
         <button class="button active" v-if="page !== 0 && page !== getDernierePage()">{{page+1}}</button>
         <button class="button" v-on:click="pageSuivante" v-if="page < getDernierePage() - 1">></button>
-        <button class="button" v-on:click="dernierePage">Page {{getDernierePage()+1}}</button>
+        <button class="button" v-on:click="dernierePage" v-bind:class="{active : page === getDernierePage()}">Page {{getDernierePage()+1}}</button>
 
     </div>
     <img src="seperateur.png" alt=""></img>

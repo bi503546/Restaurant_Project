@@ -23,12 +23,6 @@ function init() {
         },
         methods: {
              getRestaurantsFromServer() {
-                if(this.page > this.getDernierePage())
-                    this.page = this.getDernierePage();
-
-                if(this.page <  0)
-                    this.page = 0;
-
                 let url = SERVER_URL + RESOURCE +
                     "?page=" + this.page +
                     "&pagesize=" + this.pagesize +
@@ -55,19 +49,6 @@ function init() {
 
             async getRestaurant(id) {
                 let url = SERVER_URL + RESOURCE + "/" + id;
-                /*
-                let res;
-                await fetch(url)
-                    .then((reponseJSON) => {
-                        reponseJSON.json()
-                            .then((  reponseJS) => {
-                                res = reponseJS.restaurant;
-                                console.log(reponseJS.msg);
-                            });
-                    }).catch((err) => {
-                    console.log(err);
-                });*/
-
                 let response = await fetch(url);
                 let ob = await response.json();
                 let res = ob.restaurant;
@@ -168,11 +149,12 @@ function init() {
             },
 
             getDernierePage(){
-                var res = (Math.ceil(this.nbRestaurants/this.pagesize)-1);
+                let res = (Math.ceil(this.nbRestaurants/this.pagesize)-1);
                 return parseInt(res);
             },
 
             chercherRestaurants: _.debounce(function () {
+                this.page = 0;
                 this.getRestaurantsFromServer();
             }, 300),
 
@@ -187,7 +169,6 @@ function init() {
             cancelAjouter() {
                  this.addForm = false;
             }
-
         }
     })
 }
